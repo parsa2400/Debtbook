@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="fa" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>دفتر حساب</title>
+<link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png">
+<meta name="theme-color" content="#2b3a8c">
+<style>
+:root{--bg:#fff;--c:#f5f6fb;--t:#161a2b;--m:#5f6883;--p:#2b3a8c;--n:#c2262e;--o:#1b7f4b;--b:#e4e7f1}
+:root{color-scheme:light}:root[data-theme=dark]{color-scheme:dark;--bg:#0f1220;--c:#181c30;--t:#e9ecf7;--m:#98a1c0;--p:#9db0ff;--n:#ff7b81;--o:#5fd394;--b:#2a3050}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#0f1220;--c:#181c30;--t:#e9ecf7;--m:#98a1c0;--p:#9db0ff;--n:#ff7b81;--o:#5fd394;--b:#2a3050}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--t);font:16px/1.6 Vazirmatn,"Noto Sans Arabic",Tahoma,system-ui,sans-serif}
+#app{max-width:640px;margin:auto;padding:calc(12px + env(safe-area-inset-top)) 14px calc(96px + env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;gap:8px;margin-bottom:10px}h1{font-size:21px;margin:0;flex:1}h3{margin:18px 0 4px}
+.ic{background:none;border:0;font-size:22px;color:var(--t);padding:6px}
+.in,select{width:100%;padding:12px;border:1px solid var(--b);border-radius:10px;background:var(--c);color:var(--t);font:inherit;margin:4px 0 8px}
+.sum{display:flex;gap:10px;background:var(--c);border-inline-start:5px solid var(--p);border-radius:10px;padding:14px;margin:10px 0}.sum>div{flex:1}
+.sum b{font-size:24px}small,label{color:var(--m);display:block;font-size:13px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--c);border-bottom:1px solid var(--b);padding:12px 6px}.row span{font-weight:700;white-space:nowrap}
+.neg{color:var(--n)}.ok{color:var(--o)}
+.btn,.btn2,.sec,.more,.sm,.tab,.chip,.fab{font:inherit;font-weight:700;border:0;border-radius:10px;cursor:pointer}
+.btn,.btn2,.sec,.more{display:block;width:100%;padding:13px;text-align:center;margin:8px 0}
+.btn,.sm,.fab{background:var(--p);color:var(--bg)}.btn2,.sec,.more{background:var(--c);color:var(--p);border:1px solid var(--b)}
+.sm{padding:12px 16px;margin:4px 0 8px}.flex{display:flex;gap:8px}.flex .in{flex:1}.flex .sec{flex:1}
+.bar{display:flex;gap:6px;align-items:center;margin:6px 0}.bar select{margin:0;flex:1.3}
+.tab{flex:1;padding:11px;background:var(--c);color:var(--m);border:1px solid var(--b)}.tab.on{background:var(--p);color:var(--bg)}
+.chip{padding:6px 12px;margin:0 0 6px 6px;background:var(--c);color:var(--p);border:1px solid var(--b)}
+.fab{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom));left:16px;padding:14px 20px;box-shadow:0 4px 14px #0005}
+.warn{background:#fff3cd;color:#5c4400;padding:10px 12px;border-radius:10px;margin:8px 0;font-size:14px}
+.card{background:var(--c);border-radius:10px;padding:14px;margin:10px 0}.note{color:var(--m);font-size:14px;min-height:22px}
+.emp{text-align:center;color:var(--m);padding:28px 0}a{color:var(--p)}
+#ts{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--t);color:var(--bg);padding:10px 18px;border-radius:20px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}#ts.on{opacity:1}
+.hero{display:flex;gap:10px;background:linear-gradient(135deg,#2b3a8c,#5568e0);color:#fff;border-radius:20px;padding:18px;margin:12px 0;box-shadow:0 10px 24px #2b3a8c44}.hero>div{flex:1}.hero small{color:#ffffffbf}.hero b{font-size:28px}
+.row{border:1px solid var(--b);border-radius:14px;margin:8px 0;padding:12px 14px;box-shadow:0 1px 3px #0000000d;transition:transform .1s}.row:active{transform:scale(.98)}
+.who{display:flex;gap:10px;align-items:center;min-width:0}.av{width:42px;height:42px;border-radius:50%;color:#fff;display:grid;place-items:center;font-style:normal;font-weight:700;flex:none}
+.in,select,.btn,.btn2,.sec,.more,.sm,.tab{border-radius:12px}.sum,.card{border-radius:14px;box-shadow:0 1px 3px #0000000d}.fab{border-radius:30px;padding:15px 22px;box-shadow:0 8px 20px #2b3a8c66}
+.ic{width:42px;height:42px;border-radius:50%;background:var(--c);border:1px solid var(--b);padding:0;font-size:19px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.grid>div{background:var(--c);border:1px solid var(--b);border-radius:14px;padding:12px}.grid b{font-size:17px;display:block}
+@media print{tr{break-inside:avoid}}
+#pr{display:none}table{width:100%;border-collapse:collapse}th,td{border:1px solid #999;padding:6px;text-align:right}
+@media print{body>*:not(#pr){display:none!important}#pr{display:block;color:#000;background:#fff}body{background:#fff}}
+</style></head><body>
+<div id="app"></div><div id="ts"></div><div id="pr"></div>
+<script>
+const $=s=>document.querySelector(s),D='۰۱۲۳۴۵۶۷۸۹',M=new Map();
+let db,C=[],T=[],cur=null,view='home',q='',mode='debt',sortBy='bal',lim=50,tm;
+const P=s=>String(s).replace(/\d/g,d=>D[d]);
+const toEn=s=>String(s).replace(/[۰-۹]/g,d=>D.indexOf(d)).replace(/[٠-٩]/g,d=>d.charCodeAt(0)-1632);
+const norm=s=>toEn(s).replace(/ي/g,'ی').replace(/ك/g,'ک').replace(/[\u064B-\u065F\u0640]/g,'').replace(/[\u200c\u200f]/g,' ').replace(/\s+/g,' ').trim().toLowerCase();
+const fmt=n=>(n<0?'−':'')+P(Math.abs(n).toLocaleString('en-US')).replace(/,/g,'٬');
+const amt=s=>parseInt(toEn(s).replace(/\D/g,''))||0;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ls=(k,v)=>{try{return v===undefined?localStorage.getItem(k):localStorage.setItem(k,v)}catch{return null}};
+const MN=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];let MG=[];
+function toJ(d){const gy=d.getFullYear(),gm=d.getMonth()+1,gd=d.getDate(),g=[0,31,59,90,120,151,181,212,243,273,304,334],y2=gm>2?gy+1:gy;
+let n=355666+365*gy+Math.floor((y2+3)/4)-Math.floor((y2+99)/100)+Math.floor((y2+399)/400)+gd+g[gm-1],jy=-1595+33*Math.floor(n/12053);n%=12053;
+jy+=4*Math.floor(n/1461);n%=1461;if(n>365){jy+=Math.floor((n-1)/365);n=(n-1)%365}
+return[jy,n<186?1+Math.floor(n/31):7+Math.floor((n-186)/30),1+(n<186?n%31:(n-186)%30)]}
+function jd(t,tm){const d=new Date(t),[y,m,x]=toJ(d),z=n=>String(n).padStart(2,'0');return P(y+'/'+z(m)+'/'+z(x))+(tm?' '+P(z(d.getHours())+':'+z(d.getMinutes())):'')}
+const req=r=>new Promise((s,j)=>{r.onsuccess=()=>s(r.result);r.onerror=()=>j(r.error)});
+const openDB=()=>new Promise((s,j)=>{const r=indexedDB.open('ledger',1);r.onupgradeneeded=()=>{const d=r.result;d.createObjectStore('c',{keyPath:'id',autoIncrement:true});d.createObjectStore('t',{keyPath:'id',autoIncrement:true}).createIndex('cid','cid')};r.onsuccess=()=>s(r.result);r.onerror=()=>j(r.error)});
+const store=(n,w)=>db.transaction(n,w?'readwrite':'readonly').objectStore(n);
+const txs=cid=>req(store('t').index('cid').getAll(cid));
+async function load(){C=await req(store('c').getAll());M.clear();C.forEach(c=>M.set(c.id,c));if(C.some(c=>c.buy===undefined))await fix()}
+async function addCust(name,phone){const c={name,norm:norm(name),phone,bal:0,buy:0,paid:0,last:Date.now()};c.id=await req(store('c',1).add(c));C.push(c);M.set(c.id,c);return c}
+function addTxs(cid,list){return new Promise((s,j)=>{const tr=db.transaction(['c','t'],'readwrite'),cs=tr.objectStore('c'),ts=tr.objectStore('t');let cc;
+const g=cs.get(cid);g.onsuccess=()=>{cc=g.result;const now=Date.now();list.forEach(x=>{ts.add({cid,type:x.type,amt:x.amt,note:x.note||'',ts:now});cc.bal+=x.type=='P'?x.amt:-x.amt;if(x.type=='P')cc.buy=(cc.buy||0)+x.amt;else cc.paid=(cc.paid||0)+x.amt});cc.last=now;cs.put(cc)};
+tr.oncomplete=()=>{Object.assign(M.get(cid),cc);s()};tr.onerror=()=>j(tr.error)})}
+function chg(t,n){return new Promise((s,j)=>{const tr=db.transaction(['c','t'],'readwrite'),cs=tr.objectStore('c'),ts=tr.objectStore('t');let cc;
+const g=cs.get(t.cid);g.onsuccess=()=>{cc=g.result;const k=t.type=='P'?1:-1;cc.bal-=k*t.amt;const f=t.type=='P'?'buy':'paid';cc[f]=(cc[f]||0)-t.amt+n;if(n){cc.bal+=k*n;ts.put({...t,amt:n})}else ts.delete(t.id);cs.put(cc)};
+tr.oncomplete=()=>{Object.assign(M.get(cc.id),cc);s()};tr.onerror=()=>j(tr.error)})}
+const THI={auto:'🌓',light:'☀️',dark:'🌙'},THN={auto:'تم خودکار',light:'تم روشن',dark:'تم تیره'};
+function applyTh(){const t=ls('th')||'auto',r=document.documentElement;t=='auto'?r.removeAttribute('data-theme'):r.dataset.theme=t;
+$('meta[name=theme-color]').content=t=='dark'||(t=='auto'&&matchMedia('(prefers-color-scheme:dark)').matches)?'#0f1220':'#2b3a8c'}
+function tog(){const o=['auto','light','dark'],t=o[(o.indexOf(ls('th')||'auto')+1)%3];ls('th',t);applyTh();$('#thb').textContent=THI[t];toast(THN[t])}
+function toast(m){const t=$('#ts');t.textContent=m;t.className='on';setTimeout(()=>t.className='',2200)}
+function mask(e){const v=amt(e.value);e.value=v?fmt(v):''}
+function go(v,id){view=v;cur=id||null;lim=50;render();scrollTo(0,0)}
+function render(){({home,add,cust,set,mon})[view]($('#app'))}
+const sq=v=>{q=v;lim=50;clearTimeout(tm);tm=setTimeout(lst,150)};
+function flt(){const s=norm(q),p=toEn(q);let a=mode=='debt'?C.filter(c=>c.bal>0):C;if(s)a=a.filter(c=>c.norm.includes(s)||(c.phone&&toEn(c.phone).includes(p)));
+return a.slice().sort(sortBy=='bal'?(x,y)=>y.bal-x.bal:sortBy=='old'?(x,y)=>x.last-y.last:(x,y)=>x.name.localeCompare(y.name,'fa'))}
+function home(A){let tot=0,n=0,tb=0,tp=0;for(const c of C){tb+=c.buy||0;tp+=c.paid||0;if(c.bal>0){tot+=c.bal;n++}}
+const old=!ls('bk')||Date.now()-ls('bk')>6048e5;
+A.innerHTML=`<header><h1>دفتر حساب</h1><button class=ic id=thb onclick="tog()">${THI[ls('th')||'auto']}</button><button class=ic onclick="go('set')">⚙️</button></header>
+${C.length&&old?`<div class=warn onclick="go('set')">بک‌آپ قدیمی است. برای گرفتن بک‌آپ بزنید.</div>`:''}
+<div class=hero><div><small>کل طلب (تومان)</small><b>${fmt(tot)}</b></div><div><small>تعداد بدهکار</small><b>${P(n)}</b></div></div>
+<div class=grid><div><small>کل خریدها (تومان)</small><b>${fmt(tb)}</b></div><div><small>کل پرداختی‌ها (تومان)</small><b>${fmt(tp)}</b></div><div><small>تعداد مشتریان</small><b>${P(C.length)}</b></div><div><small>درصد وصول</small><b>${P(tb?Math.round(tp/tb*100):0)}٪</b></div></div>
+<button class=sec onclick="go('mon')">📅 خریدها به تفکیک ماه</button>
+<input id=q class=in placeholder="جستجوی نام یا تلفن" value="${esc(q)}" oninput="sq(this.value)">
+<div class=bar><button class="tab ${mode=='debt'?'on':''}" onclick="mode='debt';lim=50;home($('#app'))">بدهکاران</button><button class="tab ${mode=='all'?'on':''}" onclick="mode='all';lim=50;home($('#app'))">همه</button>
+<select onchange="sortBy=this.value;lst()"><option value=bal>بیشترین بدهی</option><option value=old>قدیمی‌ترین فعالیت</option><option value=name>الفبا</option></select></div>
+<div id=lst></div><button class=fab onclick="go('add')">＋ خرید جدید</button>`;$('select').value=sortBy;lst()}
+function lst(){const a=flt();$('#lst').innerHTML=a.slice(0,lim).map(c=>`<div class=row onclick="go('cust',${c.id})"><div class=who><i class=av style="background:hsl(${c.id*47%360} 42% 42%)">${esc([...c.name][0]||'?')}</i><div><b>${esc(c.name)}</b><small>${c.phone?P(esc(c.phone)):''}</small></div></div><span class="${c.bal>0?'neg':'ok'}">${c.bal<0?'طلبکار ':''}${fmt(Math.abs(c.bal))}</span></div>`).join('')+(a.length>lim?`<button class=more onclick="lim+=50;lst()">نمایش بیشتر (${P(a.length-lim)})</button>`:'')||'<p class=emp>مشتری‌ای پیدا نشد. با «خرید جدید» اولین مشتری را ثبت کنید.</p>'}
+function add(A){const c=cur&&M.get(cur);
+A.innerHTML=`<header><button class=ic onclick="${c?`go('cust',${c.id})`:`go('home')`}">→</button><h1>خرید جدید</h1></header>
+<label>نام مشتری</label><input id=nm class=in autocomplete=off value="${c?esc(c.name):''}" oninput="sug()"><div id=sg></div><div id=pv class=note></div>
+<label>مبلغ کل (تومان)</label><input id=tt class=in inputmode=numeric oninput="mask(this);rem()">
+<label>پرداختی همین الان</label><input id=pd class=in inputmode=numeric oninput="mask(this);rem()">
+<div class=sum><div><small>باقی‌مانده این خرید</small><b id=rm>۰</b></div></div><div id=bk class=note></div>
+<label>توضیح (اختیاری)</label><input id=nt class=in><button class=btn onclick="savePurchase()">ثبت خرید</button>`;sug();rem()}
+function sug(){const v=norm($('#nm').value),ex=v&&C.find(c=>c.norm==v);
+$('#pv').textContent=ex?`مشتری موجود · بدهی فعلی: ${fmt(ex.bal)} تومان`:v?'مشتری جدید ساخته می‌شود':'';
+const m=v&&!ex?C.filter(c=>c.norm.includes(v)).slice(0,5):[];
+$('#sg').innerHTML=m.map(c=>`<button class=chip onclick="$('#nm').value=this.textContent;sug()">${esc(c.name)}</button>`).join('');rem()}
+function rem(){const v=norm($('#nm').value),ex=v&&C.find(c=>c.norm==v),pv=ex?ex.bal:0,t=amt($('#tt').value),p=amt($('#pd').value),e=Math.max(p-t,0),nb=pv+t-p;
+$('#rm').textContent=fmt(Math.max(t-p,0));
+$('#bk').innerHTML=(e?`اضافه‌ی پرداختی (${fmt(e)} تومان) از بدهی قبلی کم می‌شود.<br>`:'')+(t||p?`بدهی قبلی: ${fmt(pv)} ← مانده‌ی کل بعد از ثبت: <b class="${nb>0?'neg':'ok'}">${nb<0?'طلب مشتری ':''}${fmt(Math.abs(nb))}</b> تومان`:'')}
+async function savePurchase(){const nm=$('#nm').value.trim(),t=amt($('#tt').value),p=amt($('#pd').value);
+if(!nm)return toast('نام مشتری را وارد کنید');if(!t)return toast('مبلغ کل را وارد کنید');const ex=C.find(x=>x.norm==norm(nm)),nb=(ex?ex.bal:0)+t-p;
+if(nb<0&&!confirm(`پرداختی از کل بدهی بیشتر است و ${fmt(-nb)} تومان به‌عنوان طلب مشتری می‌ماند. ثبت شود؟`))return;
+const c=ex||await addCust(nm,'');
+const l=[{type:'P',amt:t,note:$('#nt').value.trim()}];if(p)l.push({type:'Y',amt:p,note:'پرداخت هنگام خرید'});
+await addTxs(c.id,l);toast('خرید ثبت شد');go('cust',c.id)}
+async function cust(A){const c=M.get(cur);
+A.innerHTML=`<header><button class=ic onclick="go('home')">→</button><h1>${esc(c.name)}</h1><button class=ic onclick="ed()">✏️</button></header>
+<div class=sum><div><small>${c.bal<0?'طلب مشتری':'بدهی'} (تومان)</small><b class="${c.bal>0?'neg':'ok'}">${fmt(Math.abs(c.bal))}</b></div>${c.phone?`<div><small>تلفن</small><a href="tel:${esc(toEn(c.phone))}">${P(esc(c.phone))}</a></div>`:''}</div>
+<div class=grid><div><small>کل خریدها</small><b>${fmt(c.buy||0)}</b></div><div><small>پرداخت‌شده</small><b>${fmt(c.paid||0)}</b></div></div><label>ثبت پرداخت</label><div class=flex><input id=py class=in inputmode=numeric placeholder="مبلغ" oninput="mask(this)"><button class=sm onclick="$('#py').value=${c.bal>0?`fmt(${c.bal})`:`''`}">کل بدهی</button></div>
+<input id=pn class=in placeholder="توضیح (اختیاری)"><button class=btn onclick="pay()">ثبت پرداخت</button>
+<div class=flex><button class=sec onclick="go('add',${c.id})">خرید جدید</button><button class=sec onclick="stmt(${c.id})">صورت‌حساب PDF</button></div>
+<h3>تاریخچه</h3><small>برای ویرایش یا حذف روی تراکنش بزنید</small><div id=hx></div>`;
+T=await txs(c.id);T.sort((a,b)=>b.ts-a.ts||b.id-a.id);draw()}
+function draw(){$('#hx').innerHTML=T.slice(0,lim).map(t=>`<div class=row onclick="et(${t.id})"><div><b class="${t.type=='P'?'neg':'ok'}">${t.type=='P'?'خرید':'پرداخت'}</b><small>${jd(t.ts,1)} ${esc(t.note)}</small></div><span>${fmt(t.amt)}</span></div>`).join('')+(T.length>lim?`<button class=more onclick="lim+=50;draw()">نمایش بیشتر</button>`:'')||'<p class=emp>هنوز تراکنشی نیست</p>'}
+async function pay(){const c=M.get(cur),v=amt($('#py').value);if(!v)return toast('مبلغ پرداخت را وارد کنید');
+if(v>c.bal&&!confirm('مبلغ بیشتر از بدهی است. ثبت شود؟ (مانده منفی یعنی طلب مشتری)'))return;
+await addTxs(c.id,[{type:'Y',amt:v,note:$('#pn').value.trim()}]);toast('پرداخت ثبت شد');render()}
+async function et(id){const t=T.find(x=>x.id==id),v=prompt('مبلغ جدید را بنویسید. برای حذف، ۰ بنویسید.',t.amt);if(v===null)return;const n=amt(v);
+if(!n&&!confirm('این تراکنش حذف شود؟'))return;await chg(t,n);toast(n?'ویرایش شد':'حذف شد');render()}
+async function ed(){const c=M.get(cur),n=prompt('نام مشتری',c.name);if(n===null)return;const p=prompt('تلفن',c.phone||'');if(p===null)return;
+if(n.trim()){c.name=n.trim();c.norm=norm(c.name)}c.phone=p.trim();await req(store('c',1).put(c));render()}
+function set(A){const b=ls('bk');
+A.innerHTML=`<header><button class=ic onclick="go('home')">→</button><h1>تنظیمات</h1></header>
+<div class=card><b>بک‌آپ</b><small>آخرین بک‌آپ: ${b?jd(+b,1):'هرگز'}</small><button class=btn onclick="exp()">دریافت فایل بک‌آپ</button>
+<label class="btn2 btn">بازیابی از فایل بک‌آپ<input type=file accept=".json" hidden onchange="imp(this.files[0])"></label></div>
+<div class=card><b>گزارش</b><small>در پنجره‌ی چاپ، «Save as PDF» را انتخاب کنید.</small><button class=btn onclick="rep(1)">PDF فقط بدهکاران</button><button class=btn onclick="rep(0)">PDF همه مشتریان</button></div>
+<div class=card><b>ابزار</b><small>${P(C.length)} مشتری ثبت شده</small><button class=btn2 onclick="recalc()">محاسبه‌ی مجدد مانده‌ها</button></div>
+<div class=card><b>شروع دوباره</b><small>همه‌ی مشتریان، خریدها و بدهی‌ها پاک می‌شود و صفحه‌ی تازه باز می‌شود.</small><button class=btn style="background:var(--n)" onclick="wipe()">پاک کردن همه‌ی حساب‌ها</button></div>`}
+async function exp(){const s=n=>req(store(n).getAll()),d={v:1,at:Date.now(),c:await s('c'),t:await s('t')},a=document.createElement('a');
+a.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:'application/json'}));a.download='dafter-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();ls('bk',Date.now());toast('بک‌آپ آماده شد');set($('#app'))}
+async function imp(f){if(!f)return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d.c)||!Array.isArray(d.t))throw 0;
+if(!confirm(`${P(d.c.length)} مشتری بازیابی شود؟ اطلاعات فعلی جایگزین می‌شود.`))return;
+await new Promise((s,j)=>{const tr=db.transaction(['c','t'],'readwrite'),c=tr.objectStore('c'),t=tr.objectStore('t');c.clear();t.clear();d.c.forEach(x=>c.put(x));d.t.forEach(x=>t.put(x));tr.oncomplete=s;tr.onerror=()=>j(tr.error)});
+await load();toast('بازیابی شد');go('home')}catch(e){toast('فایل بک‌آپ معتبر نیست')}}
+async function fix(){const a=await req(store('t').getAll()),b=new Map();for(const t of a){const o=b.get(t.cid)||{buy:0,paid:0};if(t.type=='P')o.buy+=t.amt;else o.paid+=t.amt;b.set(t.cid,o)}
+return new Promise((s,j)=>{const tr=db.transaction('c','readwrite'),st=tr.objectStore('c');for(const c of C){const o=b.get(c.id)||{buy:0,paid:0},v=o.buy-o.paid;if(c.bal!=v||c.buy!=o.buy||c.paid!=o.paid){c.bal=v;c.buy=o.buy;c.paid=o.paid;st.put(c)}}tr.oncomplete=s;tr.onerror=()=>j(tr.error)})}
+async function recalc(){await fix();toast('انجام شد');set($('#app'))}
+function mHead(k){return MN[k%100-1]+' '+P(Math.floor(k/100))}
+async function mon(A){const a=await req(store('t').getAll()),key=t=>{const[y,m]=toJ(new Date(t.ts));return y*100+m};
+if(!cur){const g=new Map();for(const t of a){const k=key(t),o=g.get(k)||{b:0,p:0,n:0};if(t.type=='P')o.b+=t.amt;else o.p+=t.amt;o.n++;g.set(k,o)}
+MG=[...g].sort((x,y)=>y[0]-x[0]);
+A.innerHTML=`<header><button class=ic onclick="go('home')">→</button><h1>خریدها به تفکیک ماه</h1></header>`+(MG.length?`<button class=sec onclick="repM()">PDF گزارش ماهانه</button>`:'')+(MG.map(([k,o])=>`<div class=row onclick="go('mon',${k})"><div><b>${mHead(k)}</b><small>${P(o.n)} تراکنش</small></div><div><b class=neg>${fmt(o.b)}</b><small>پرداخت: ${fmt(o.p)}</small></div></div>`).join('')||'<p class=emp>هنوز خریدی ثبت نشده</p>')}
+else{T=a.filter(t=>key(t)==cur).sort((x,y)=>y.ts-x.ts||y.id-x.id);
+A.innerHTML=`<header><button class=ic onclick="go('mon')">→</button><h1>${mHead(cur)}</h1></header><div id=hx></div>`;dm()}}
+function dm(){$('#hx').innerHTML=T.slice(0,lim).map(t=>`<div class=row onclick="go('cust',${t.cid})"><div><b>${esc(M.get(t.cid)?.name||'؟')}</b><small>${t.type=='P'?'خرید':'پرداخت'} · ${jd(t.ts,1)} ${esc(t.note)}</small></div><span class="${t.type=='P'?'neg':'ok'}">${fmt(t.amt)}</span></div>`).join('')+(T.length>lim?`<button class=more onclick="lim+=50;dm()">نمایش بیشتر</button>`:'')}
+function repM(){let b=0,p=0;MG.forEach(([k,o])=>{b+=o.b;p+=o.p});pr(`<h2>گزارش ماهانه خریدها</h2><p>تاریخ: ${jd(Date.now())}</p><table><tr><th>ماه<th>تعداد تراکنش<th>خرید<th>پرداخت</tr>${MG.map(([k,o])=>`<tr><td>${mHead(k)}<td>${P(o.n)}<td>${fmt(o.b)}<td>${fmt(o.p)}`).join('')}<tr><th colspan=2>جمع کل (تومان)<th>${fmt(b)}<th>${fmt(p)}</table>`)}
+async function wipe(){if(!C.length)return toast('چیزی برای پاک کردن نیست');
+if(confirm('قبل از پاک کردن، فایل بک‌آپ گرفته شود؟ (پیشنهاد می‌شود)'))await exp();
+if(norm(prompt('با این کار همه‌ی مشتریان، خریدها و بدهی‌ها برای همیشه پاک می‌شود. برای تأیید، کلمه‌ی «پاک» را بنویسید.')||'')!='پاک')return toast('لغو شد');
+await new Promise((s,j)=>{const tr=db.transaction(['c','t'],'readwrite');tr.objectStore('c').clear();tr.objectStore('t').clear();tr.oncomplete=s;tr.onerror=()=>j(tr.error)});
+await load();toast('همه‌چیز پاک شد. صفحه‌ی تازه آماده است');go('home')}
+function pr(h){$('#pr').innerHTML=h;setTimeout(print,150)}
+function rep(d){const a=(d?C.filter(c=>c.bal>0):C.slice()).sort((x,y)=>y.bal-x.bal),z=[0,0,0];a.forEach(c=>{z[0]+=c.buy||0;z[1]+=c.paid||0;z[2]+=c.bal});
+pr(`<h2>${d?'لیست بدهکاران':'گزارش همه مشتریان'}</h2><p>تاریخ: ${jd(Date.now())} · تعداد: ${P(a.length)} مشتری</p><table><tr><th>ردیف<th>نام<th>تلفن<th>کل خرید<th>پرداخت‌شده<th>بدهی</tr>${a.map((c,i)=>`<tr><td>${P(i+1)}<td>${esc(c.name)}<td>${P(esc(c.phone||''))}<td>${fmt(c.buy||0)}<td>${fmt(c.paid||0)}<td>${fmt(c.bal)}`).join('')}<tr><th colspan=3>جمع کل (تومان)<th>${fmt(z[0])}<th>${fmt(z[1])}<th>${fmt(z[2])}</table>`)}
+async function stmt(id){const c=M.get(id),a=await txs(id);a.sort((x,y)=>x.ts-y.ts||x.id-y.id);let r=0;
+pr(`<h2>صورت‌حساب ${esc(c.name)}</h2><p>تاریخ: ${jd(Date.now())}${c.phone?' · تلفن: '+P(esc(c.phone)):''}</p><table><tr><th>تاریخ<th>شرح<th>خرید<th>پرداخت<th>مانده</tr>${a.map(t=>{r+=t.type=='P'?t.amt:-t.amt;return`<tr><td>${jd(t.ts)}<td>${esc(t.note)}<td>${t.type=='P'?fmt(t.amt):''}<td>${t.type=='Y'?fmt(t.amt):''}<td>${fmt(r)}`}).join('')}</table><h3>مانده: ${fmt(c.bal)} تومان</h3>`)}
+applyTh();(async()=>{try{db=await openDB();await load();navigator.storage?.persist?.();render()}catch(e){$('#app').innerHTML='<p class=emp>حافظه‌ی مرورگر در دسترس نیست. مرورگر را بررسی کنید.</p>'}
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{})})();
+</script></body></html>
