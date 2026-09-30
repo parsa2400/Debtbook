@@ -37,6 +37,16 @@ header{display:flex;align-items:center;gap:8px;margin-bottom:10px}h1{font-size:2
 .ic{width:42px;height:42px;border-radius:50%;background:var(--c);border:1px solid var(--b);padding:0;font-size:19px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.grid>div{background:var(--c);border:1px solid var(--b);border-radius:14px;padding:12px}.grid b{font-size:17px;display:block}
 @media print{tr{break-inside:avoid}}
+button,.row,.tab,label.btn,label.btn2{cursor:pointer}
+@media(min-width:900px){
+#app{max-width:1000px;padding-top:24px}
+body[data-v=add] #app,body[data-v=set] #app,body[data-v=cust] #app{max-width:680px}
+.grid{grid-template-columns:repeat(4,1fr)}body[data-v=cust] .grid{grid-template-columns:1fr 1fr}
+#lst,body[data-v=mon] #hx{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;align-items:start}
+#lst .more,#lst .emp{grid-column:1/-1}
+.row:hover{border-color:var(--p)}.btn:hover,.sm:hover,.fab:hover{filter:brightness(1.1)}
+.fab{left:max(16px,calc(50% - 500px))}
+}
 #pr{display:none}table{width:100%;border-collapse:collapse}th,td{border:1px solid #999;padding:6px;text-align:right}
 @media print{body>*:not(#pr){display:none!important}#pr{display:block;color:#000;background:#fff}body{background:#fff}}
 </style></head><body>
@@ -76,12 +86,12 @@ function tog(){const o=['auto','light','dark'],t=o[(o.indexOf(ls('th')||'auto')+
 function toast(m){const t=$('#ts');t.textContent=m;t.className='on';setTimeout(()=>t.className='',2200)}
 function mask(e){const v=amt(e.value);e.value=v?fmt(v):''}
 function go(v,id){view=v;cur=id||null;lim=50;render();scrollTo(0,0)}
-function render(){({home,add,cust,set,mon})[view]($('#app'))}
+function render(){document.body.dataset.v=view;({home,add,cust,set,mon})[view]($('#app'))}
 const sq=v=>{q=v;lim=50;clearTimeout(tm);tm=setTimeout(lst,150)};
 function flt(){const s=norm(q),p=toEn(q);let a=mode=='debt'?C.filter(c=>c.bal>0):C;if(s)a=a.filter(c=>c.norm.includes(s)||(c.phone&&toEn(c.phone).includes(p)));
 return a.slice().sort(sortBy=='bal'?(x,y)=>y.bal-x.bal:sortBy=='old'?(x,y)=>x.last-y.last:(x,y)=>x.name.localeCompare(y.name,'fa'))}
 function home(A){let tot=0,n=0,tb=0,tp=0;for(const c of C){tb+=c.buy||0;tp+=c.paid||0;if(c.bal>0){tot+=c.bal;n++}}
-const old=!ls('bk')||Date.now()-ls('bk')>6048e5;
+const old=!ls('bk')||Date.now()-ls('bk')>(ls('ab')=='0'?6048e5:2765e6);
 A.innerHTML=`<header><h1>دفتر حساب</h1><button class=ic id=thb onclick="tog()">${THI[ls('th')||'auto']}</button><button class=ic onclick="go('set')">⚙️</button></header>
 ${C.length&&old?`<div class=warn onclick="go('set')">بک‌آپ قدیمی است. برای گرفتن بک‌آپ بزنید.</div>`:''}
 <div class=hero><div><small>کل طلب (تومان)</small><b>${fmt(tot)}</b></div><div><small>تعداد بدهکار</small><b>${P(n)}</b></div></div>
@@ -130,13 +140,21 @@ async function ed(){const c=M.get(cur),n=prompt('نام مشتری',c.name);if(n
 if(n.trim()){c.name=n.trim();c.norm=norm(c.name)}c.phone=p.trim();await req(store('c',1).put(c));render()}
 function set(A){const b=ls('bk');
 A.innerHTML=`<header><button class=ic onclick="go('home')">→</button><h1>تنظیمات</h1></header>
-<div class=card><b>بک‌آپ</b><small>آخرین بک‌آپ: ${b?jd(+b,1):'هرگز'}</small><button class=btn onclick="exp()">دریافت فایل بک‌آپ</button>
+<div class=card><b>بک‌آپ</b><small>آخرین بک‌آپ: ${b?jd(+b,1):'هرگز'}</small><label style="display:flex;gap:8px;align-items:center;margin:8px 0;color:var(--t);font-size:15px"><input type=checkbox ${ls('ab')!='0'?'checked':''} onchange="ls('ab',this.checked?'1':'0')"> بک‌آپ خودکار ماهانه (در پوشه‌ی Downloads)</label>
+<button class=btn onclick="exp()">دریافت فایل بک‌آپ</button><button class=btn2 onclick="shareBk()">ارسال بک‌آپ (تلگرام، واتساپ، ...)</button>
 <label class="btn2 btn">بازیابی از فایل بک‌آپ<input type=file accept=".json" hidden onchange="imp(this.files[0])"></label></div>
 <div class=card><b>گزارش</b><small>در پنجره‌ی چاپ، «Save as PDF» را انتخاب کنید.</small><button class=btn onclick="rep(1)">PDF فقط بدهکاران</button><button class=btn onclick="rep(0)">PDF همه مشتریان</button></div>
 <div class=card><b>ابزار</b><small>${P(C.length)} مشتری ثبت شده</small><button class=btn2 onclick="recalc()">محاسبه‌ی مجدد مانده‌ها</button></div>
 <div class=card><b>شروع دوباره</b><small>همه‌ی مشتریان، خریدها و بدهی‌ها پاک می‌شود و صفحه‌ی تازه باز می‌شود.</small><button class=btn style="background:var(--n)" onclick="wipe()">پاک کردن همه‌ی حساب‌ها</button></div>`}
-async function exp(){const s=n=>req(store(n).getAll()),d={v:1,at:Date.now(),c:await s('c'),t:await s('t')},a=document.createElement('a');
-a.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:'application/json'}));a.download='dafter-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();ls('bk',Date.now());toast('بک‌آپ آماده شد');set($('#app'))}
+async function snap(){const g=n=>req(store(n).getAll());return new Blob([JSON.stringify({v:1,at:Date.now(),c:await g('c'),t:await g('t')})],{type:'application/json'})}
+const bkName=()=>'dafter-backup-'+new Date().toISOString().slice(0,10)+'.json';
+async function exp(q){const a=document.createElement('a');a.href=URL.createObjectURL(await snap());a.download=bkName();a.click();ls('bk',Date.now());
+if(q)toast('بک‌آپ خودکار گرفته شد');else{toast('بک‌آپ آماده شد');set($('#app'))}}
+async function shareBk(){const f=new File([await snap()],bkName(),{type:'application/json'});
+if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f]});ls('bk',Date.now());set($('#app'))}catch{}}else exp()}
+let abBusy=0;async function autoBk(){if(abBusy||ls('ab')=='0'||!C.length||Date.now()-(+ls('bk')||0)<2592e6)return;abBusy=1;try{await exp(1)}finally{abBusy=0}}
+addEventListener('pointerdown',autoBk);
+addEventListener('keydown',e=>{if(e.key!='Enter'||e.isComposing)return;const i=e.target.id;if(['nm','tt','pd','nt'].includes(i))savePurchase();else if(['py','pn'].includes(i))pay()});
 async function imp(f){if(!f)return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d.c)||!Array.isArray(d.t))throw 0;
 if(!confirm(`${P(d.c.length)} مشتری بازیابی شود؟ اطلاعات فعلی جایگزین می‌شود.`))return;
 await new Promise((s,j)=>{const tr=db.transaction(['c','t'],'readwrite'),c=tr.objectStore('c'),t=tr.objectStore('t');c.clear();t.clear();d.c.forEach(x=>c.put(x));d.t.forEach(x=>t.put(x));tr.oncomplete=s;tr.onerror=()=>j(tr.error)});
