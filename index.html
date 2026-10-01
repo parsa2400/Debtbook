@@ -47,6 +47,7 @@ body[data-v=add] #app,body[data-v=set] #app,body[data-v=cust] #app{max-width:680
 .row:hover{border-color:var(--p)}.btn:hover,.sm:hover,.fab:hover{filter:brightness(1.1)}
 .fab{left:max(16px,calc(50% - 500px))}
 }
+.wd{color:var(--m);font-size:13px;min-height:20px;margin:-4px 0 6px}
 #pr{display:none}table{width:100%;border-collapse:collapse}th,td{border:1px solid #999;padding:6px;text-align:right}
 @media print{body>*:not(#pr){display:none!important}#pr{display:block;color:#000;background:#fff}body{background:#fff}}
 </style></head><body>
@@ -84,7 +85,10 @@ function applyTh(){const t=ls('th')||'auto',r=document.documentElement;t=='auto'
 $('meta[name=theme-color]').content=t=='dark'||(t=='auto'&&matchMedia('(prefers-color-scheme:dark)').matches)?'#0f1220':'#2b3a8c'}
 function tog(){const o=['auto','light','dark'],t=o[(o.indexOf(ls('th')||'auto')+1)%3];ls('th',t);applyTh();$('#thb').textContent=THI[t];toast(THN[t])}
 function toast(m){const t=$('#ts');t.textContent=m;t.className='on';setTimeout(()=>t.className='',2200)}
-function mask(e){const v=amt(e.value);e.value=v?fmt(v):''}
+const W1=['','یک','دو','سه','چهار','پنج','شش','هفت','هشت','نه','ده','یازده','دوازده','سیزده','چهارده','پانزده','شانزده','هفده','هجده','نوزده'],W2=['','','بیست','سی','چهل','پنجاه','شصت','هفتاد','هشتاد','نود'],W3=['','صد','دویست','سیصد','چهارصد','پانصد','ششصد','هفتصد','هشتصد','نهصد'],WS=['','هزار','میلیون','میلیارد','تریلیون'];
+function w3(n){const a=[],h=Math.floor(n/100),r=n%100;if(h)a.push(W3[h]);if(r<20){if(r)a.push(W1[r])}else{a.push(W2[Math.floor(r/10)]);if(r%10)a.push(W1[r%10])}return a.join(' و ')}
+function words(n){if(!n)return'';const g=[];let i=0;while(n>0&&i<5){const x=n%1000;if(x)g.unshift(i?(i==1&&x==1?'هزار':w3(x)+' '+WS[i]):w3(x));n=Math.floor(n/1000);i++}return g.join(' و ')+' تومان'}
+function mask(e){const v=amt(e.value),w=$('#w'+e.id);e.value=v?fmt(v):'';if(w)w.textContent=words(v)}
 function go(v,id){view=v;cur=id||null;lim=50;render();scrollTo(0,0)}
 function render(){document.body.dataset.v=view;({home,add,cust,set,mon})[view]($('#app'))}
 const sq=v=>{q=v;lim=50;clearTimeout(tm);tm=setTimeout(lst,150)};
@@ -105,8 +109,8 @@ function lst(){const a=flt();$('#lst').innerHTML=a.slice(0,lim).map(c=>`<div cla
 function add(A){const c=cur&&M.get(cur);
 A.innerHTML=`<header><button class=ic onclick="${c?`go('cust',${c.id})`:`go('home')`}">→</button><h1>خرید جدید</h1></header>
 <label>نام مشتری</label><input id=nm class=in autocomplete=off value="${c?esc(c.name):''}" oninput="sug()"><div id=sg></div><div id=pv class=note></div>
-<label>مبلغ کل (تومان)</label><input id=tt class=in inputmode=numeric oninput="mask(this);rem()">
-<label>پرداختی همین الان</label><input id=pd class=in inputmode=numeric oninput="mask(this);rem()">
+<label>مبلغ کل (تومان)</label><input id=tt class=in inputmode=numeric oninput="mask(this);rem()"><div class=wd id=wtt></div>
+<label>پرداختی همین الان</label><input id=pd class=in inputmode=numeric oninput="mask(this);rem()"><div class=wd id=wpd></div>
 <div class=sum><div><small>باقی‌مانده این خرید</small><b id=rm>۰</b></div></div><div id=bk class=note></div>
 <label>توضیح (اختیاری)</label><input id=nt class=in><button class=btn onclick="savePurchase()">ثبت خرید</button>`;sug();rem()}
 function sug(){const v=norm($('#nm').value),ex=v&&C.find(c=>c.norm==v);
@@ -125,8 +129,8 @@ await addTxs(c.id,l);toast('خرید ثبت شد');go('cust',c.id)}
 async function cust(A){const c=M.get(cur);
 A.innerHTML=`<header><button class=ic onclick="go('home')">→</button><h1>${esc(c.name)}</h1><button class=ic onclick="ed()">✏️</button></header>
 <div class=sum><div><small>${c.bal<0?'طلب مشتری':'بدهی'} (تومان)</small><b class="${c.bal>0?'neg':'ok'}">${fmt(Math.abs(c.bal))}</b></div>${c.phone?`<div><small>تلفن</small><a href="tel:${esc(toEn(c.phone))}">${P(esc(c.phone))}</a></div>`:''}</div>
-<div class=grid><div><small>کل خریدها</small><b>${fmt(c.buy||0)}</b></div><div><small>پرداخت‌شده</small><b>${fmt(c.paid||0)}</b></div></div><label>ثبت پرداخت</label><div class=flex><input id=py class=in inputmode=numeric placeholder="مبلغ" oninput="mask(this)"><button class=sm onclick="$('#py').value=${c.bal>0?`fmt(${c.bal})`:`''`}">کل بدهی</button></div>
-<input id=pn class=in placeholder="توضیح (اختیاری)"><button class=btn onclick="pay()">ثبت پرداخت</button>
+<div class=grid><div><small>کل خریدها</small><b>${fmt(c.buy||0)}</b></div><div><small>پرداخت‌شده</small><b>${fmt(c.paid||0)}</b></div></div><label>ثبت پرداخت</label><div class=flex><input id=py class=in inputmode=numeric placeholder="مبلغ" oninput="mask(this)"><button class=sm onclick="$('#py').value=${c.bal>0?`fmt(${c.bal})`:`''`};mask($('#py'))">کل بدهی</button></div>
+<div class=wd id=wpy></div><input id=pn class=in placeholder="توضیح (اختیاری)"><button class=btn onclick="pay()">ثبت پرداخت</button>
 <div class=flex><button class=sec onclick="go('add',${c.id})">خرید جدید</button><button class=sec onclick="stmt(${c.id})">صورت‌حساب PDF</button></div>
 <h3>تاریخچه</h3><small>برای ویرایش یا حذف روی تراکنش بزنید</small><div id=hx></div>`;
 T=await txs(c.id);T.sort((a,b)=>b.ts-a.ts||b.id-a.id);draw()}
